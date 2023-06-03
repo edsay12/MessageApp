@@ -17,11 +17,10 @@ export const Button = styled.button<ButtonProps>`
   width: ${({ theme, size }) =>
     size === "Full" ? `${100}%` : theme.default.buttonSizes[size]};
   // mudar depois 
-  ${({ isdisable }) =>
-    false
-      ? css`
-          opacity: 0.5;
-          cursor: default;
-        `
-      : ""}
+  ${({ isDisable }) => isDisable && (
+    css`
+      opacity: 0.5;
+      cursor: wait;
+    `
+  )}
 `;

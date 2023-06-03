@@ -3,20 +3,20 @@ import * as S from "./style";
 
 export type ButtonProps = {
   size: "Full" | "small" | "medium" | "large";
-  isdisable?: boolean;
+  isDisable?: boolean;
   children: React.ReactNode;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export function Button({
   children,
-  isdisable = false,
+  isDisable,
   size = "Full",
   onClick,
   ...rest
 }: ButtonProps) {
   return (
-    <S.Button {...rest} onClick={onClick} isdisable size={size} disabled={isdisable}>
+    <S.Button {...rest} onClick={onClick} isDisable={isDisable} disabled={isDisable} size={size} >
       {children}
     </S.Button>
   );

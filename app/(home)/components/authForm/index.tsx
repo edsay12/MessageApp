@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { signIn } from "next-auth/react";
 
 type VarientType = "LOGIN" | "REGISTER";
+type SocialAction = "GITHUB" | "GOOGLE";
 
 export function AuthForm() {
   const [variant, setVariante] = useState<VarientType>("LOGIN");
@@ -75,6 +76,7 @@ export function AuthForm() {
     setIsLoading(true);
 
     if (variant === "REGISTER") {
+      setIsLoading(true)
       axios
         .post("/api/register", data)
         .then(() => {
@@ -90,20 +92,38 @@ export function AuthForm() {
     // cledential e o nome do provider
     // o redirect false evita de sermos redirecionado
     if (variant === "LOGIN") {
+      setIsLoading(true);
       signIn("credentials", {
         ...data,
         redirect: false,
-      }).then((cb) => {
-        if (cb?.error) toast.error("invalid credentials");
-        if (cb?.ok && !cb.error) toast.success("Logged In");
-      });
+      })
+        .then((cb) => {
+          if (cb?.error) toast.error("invalid credentials");
+          if (cb?.ok && !cb.error) toast.success("Logged In");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
   };
 
-  const socialAction = (action: string) => {
-    // setIsLoading(true);
-    console.log(action);
-    // login con a rede social
+  const socialAction = (action: SocialAction) => {
+    setIsLoading(true);
+    if (action === "GITHUB") {
+      signIn("github", {
+        redirect: false,
+      })
+        .then((cb) => {
+          if (cb?.error) toast.error("Something went wrog");
+          if (cb?.ok && !cb.error) toast.success("Wow, success");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+    if (action === "GOOGLE") {
+      return;
+    }
   };
 
   return (
@@ -138,7 +158,7 @@ export function AuthForm() {
             leftIcon={<FaLock />}
             register={register}
           />
-          <Button type="submit" size="Full">
+          <Button type="submit" isDisable={isLoading} size="Full">
             Entrar
           </Button>
 
@@ -146,13 +166,13 @@ export function AuthForm() {
         </form>
         <ButtonsContainer>
           <SocialButton
-            onClick={() => socialAction("GitHub")}
+            onClick={() => socialAction("GITHUB")}
             size="Full"
             icon={<FaGithub />}
           />
 
           <SocialButton
-            onClick={() => socialAction("Google")}
+            onClick={() => socialAction("GOOGLE")}
             size="Full"
             icon={<FaGoogle />}
           />
