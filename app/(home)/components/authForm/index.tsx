@@ -122,7 +122,17 @@ export function AuthForm() {
         });
     }
     if (action === "GOOGLE") {
-      return;
+      setIsLoading(true)
+      signIn("google", {
+        redirect: false,
+      })
+        .then((cb) => {
+          if (cb?.error) toast.error("Something went wrog");
+          if (cb?.ok && !cb.error) toast.success("Wow, success");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
   };
 
