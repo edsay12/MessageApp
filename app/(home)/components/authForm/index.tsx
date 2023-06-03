@@ -27,7 +27,7 @@ export function AuthForm() {
 
   useEffect(() => {
     if (session.status === "authenticated") {
-      router.push("/user");
+      router.push("/users");
     }
   }, [session.status, router]);
   const schema = z
@@ -112,7 +112,7 @@ export function AuthForm() {
           if (cb?.error) toast.error("invalid credentials");
           if (cb?.ok && !cb.error) {
             toast.success("Logged In");
-            router.push("/user");
+            router.push("/users");
           }
         })
         .finally(() => {

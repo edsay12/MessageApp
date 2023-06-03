@@ -7,7 +7,7 @@ export default withAuth({
 });
 
 export const config = {
-  matcher: ["/user/:path*"], // aqui e a pagina que queremos proteger
+  matcher: ["/users/:path*"], // aqui e a pagina que queremos proteger
   // aqui eu estou protegento a pagina user e tudo que pode vir depois tipo 
   // user/message
 };
