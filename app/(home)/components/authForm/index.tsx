@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,14 +13,23 @@ import * as S from "./styled";
 import { ButtonsContainer } from "@/components/ButtonContainer";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type VarientType = "LOGIN" | "REGISTER";
 type SocialAction = "GITHUB" | "GOOGLE";
 
 export function AuthForm() {
+  const session = useSession();
+  const router = useRouter();
   const [variant, setVariante] = useState<VarientType>("LOGIN");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (session.status === "authenticated") {
+      router.push("/user");
+    }
+  }, [session.status, router]);
   const schema = z
     .object({
       email: z.string().email({ message: "The email must be valid" }),
@@ -76,10 +85,12 @@ export function AuthForm() {
     setIsLoading(true);
 
     if (variant === "REGISTER") {
-      setIsLoading(true)
+      setIsLoading(true);
       axios
         .post("/api/register", data)
         .then(() => {
+          toast.success("Success,enter in you account");
+          setVariante('LOGIN')
           reset();
         })
         .catch((e) => {
@@ -99,7 +110,10 @@ export function AuthForm() {
       })
         .then((cb) => {
           if (cb?.error) toast.error("invalid credentials");
-          if (cb?.ok && !cb.error) toast.success("Logged In");
+          if (cb?.ok && !cb.error) {
+            toast.success("Logged In");
+            router.push("/user");
+          }
         })
         .finally(() => {
           setIsLoading(false);
@@ -115,14 +129,16 @@ export function AuthForm() {
       })
         .then((cb) => {
           if (cb?.error) toast.error("Something went wrog");
-          if (cb?.ok && !cb.error) toast.success("Wow, success");
+          if (cb?.ok && !cb.error) {
+            toast.success("Wow, success");
+          }
         })
         .finally(() => {
           setIsLoading(false);
         });
     }
     if (action === "GOOGLE") {
-      setIsLoading(true)
+      setIsLoading(true);
       signIn("google", {
         redirect: false,
       })

@@ -4,7 +4,8 @@ import { GlobalStyle } from "./global-styled";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
 import { ToastContext } from "./context/ToastContext";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
+import AuthContext from "./context/AuthContext";
 
 export const metadata = {
   title: "Message",
@@ -21,9 +22,11 @@ export default function RootLayout({
       <body>
         <>
           <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <ToastContext />
-            {children}
+            <AuthContext>
+              <GlobalStyle />
+              <ToastContext />
+              {children}
+            </AuthContext>
           </ThemeProvider>
         </>
       </body>
