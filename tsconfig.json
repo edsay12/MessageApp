@@ -23,6 +23,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "prisma/seed.mjs", "components/Inputs/index.tsx", "app/_document.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "prisma/seed.mjs", "components/Inputs/index.tsx", "app/_document.js", "components/Sidebar/components/MobileSidebar"],
   "exclude": ["node_modules"]
 }
