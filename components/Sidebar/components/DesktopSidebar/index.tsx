@@ -3,9 +3,10 @@ import { useRouter } from "@/hooks/useRoutes";
 import { useState } from "react";
 import DesktopItem from "./components/DesktopItem";
 import { User } from "@prisma/client";
+import Avatar from "@/components/Avatar";
 
 type PropTypes = {
-  currentUser?: User | null;
+  currentUser: User;
 };
 function DesktopSidebar({ currentUser }: PropTypes) {
   const routes = useRouter();
@@ -28,6 +29,11 @@ function DesktopSidebar({ currentUser }: PropTypes) {
             />
           ))}
         </ul>
+      </nav>
+      <nav>
+        <div>
+          <Avatar user={currentUser!} />
+        </div>
       </nav>
     </>
   );

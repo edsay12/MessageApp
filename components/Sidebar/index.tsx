@@ -7,7 +7,7 @@ async function Sidebar({ children }: { children: React.ReactNode }) {
   return (
     <div>
       <main>
-        <DesktopSidebar currentUser={currentUser} />
+        <DesktopSidebar currentUser={currentUser!} />
         <MobileSidebar />
 
         {children}
