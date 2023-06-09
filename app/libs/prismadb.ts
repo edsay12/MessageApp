@@ -1,13 +1,26 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
-// O GlobalThis e uma variavel global
-// Se eu estiver em um modo diferente de pro
 declare global {
-  var prisma: PrismaClient | undefined;
+  namespace NodeJS {
+    interface Global {
+      prisma: PrismaClient;
+    }
+  }
 }
 
-const client = globalThis.prisma || new PrismaClient();
+let prisma: PrismaClient;
 
-if (process.env.NODE_ENV != "production") globalThis.prisma = client;
+if (typeof window === "undefined") {
+  if (process.env.NODE_ENV === "production") {
+    prisma = new PrismaClient();
+  } else {
+    if (!global.prisma) {
+      global.prisma = new PrismaClient();
+    }
 
-export default client;
+    prisma = global.prisma;
+  }
+}
+
+//@ts-ignore
+export default prisma;
